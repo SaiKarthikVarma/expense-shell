@@ -20,6 +20,20 @@ VALIDATE(){
     fi
 }
 
+check(){    
+    dnf list installed mysql
+    if [ $? -ne 0 ]
+    then
+        echo "mysql is not installed ...going to be installed"
+        dnf install mysql-server -y &>>$LOG_FILE
+        VALIDATE $? "Installing MySQL server"
+    else 
+        echo "mysql server is already installed"
+    fi    
+
+        
+
+}      
 
 
 echo "the script started executed at $(date)" | tee -a $LOG_FILE
@@ -31,8 +45,7 @@ then
     exit 2
 fi
 
-dnf install mysql-server -y &>>$LOG_FILE
-VALIDATE $? "Installing MySQL server"
+check
 
 systemctl enable mysqld &>>$LOG_FILE
 VALIDATE $? "Enabled mysql server"
@@ -48,5 +61,4 @@ then
     VALIDATE $? "SETTING ROOT PASSWORD"
 else
     echo "MySQL root password is already setup....skipping" | tee -a $LOG_FILE
-
 fi
