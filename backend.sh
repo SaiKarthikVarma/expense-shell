@@ -46,14 +46,14 @@ then
     exit 2
 fi
 
-dnf module disable nodejs -y
+dnf module disable nodejs -y &>>$LOG_FILE
 VALIDATE $? "disable default node js"
 
-dnf module enable nodejs:20 -y
+dnf module enable nodejs:20 -y &>>$LOG_FILE
 VALIDATE $? "enable nodejs 20" 
 
-dnf install nodejs -y
+dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "installing node js"
 
-useradd expense
+useradd expense &>>$LOG_FILE
 VALIDATE $? "creating expense user"
